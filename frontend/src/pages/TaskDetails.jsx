@@ -1,6 +1,49 @@
+// import axios from "axios";
+// import { useEffect, useState } from "react";
+// import { useParams, useNavigate } from "react-router-dom";
+
+// export default function TaskDetails() {
+//   const { id } = useParams();
+//   const [task, setTask] = useState(null);
+
+//   const token = localStorage.getItem("token");
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     axios.get("http://localhost:5000/api/tasks", {
+//       headers: { Authorization: token }
+//     }).then(res => {
+//       const found = res.data.find(t => t._id === id);
+//       setTask(found);
+//     });
+//   }, []);
+
+//   if (!task) return <p>Loading...</p>;
+
+//   return (
+//     <div style={{ padding: "20px" }}>
+//       <button onClick={() => navigate(-1)}>⬅ Back</button>
+
+//       <h2>Task Details</h2>
+
+//       <p><strong>Title:</strong> {task.title}</p>
+//       <p><strong>Status:</strong> {task.status}</p>
+
+//       {task.dueDate && (
+//         <p><strong>Due:</strong> {new Date(task.dueDate).toDateString()}</p>
+//       )}
+//     </div>
+//   );
+// }
+
+
+
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function TaskDetails() {
   const { id } = useParams();
@@ -10,12 +53,14 @@ export default function TaskDetails() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/tasks", {
+    axios.get(`${API_URL}/api/tasks`, {
       headers: { Authorization: token }
-    }).then(res => {
+    })
+    .then(res => {
       const found = res.data.find(t => t._id === id);
       setTask(found);
-    });
+    })
+    .catch(() => alert("Failed to load task"));
   }, []);
 
   if (!task) return <p>Loading...</p>;
